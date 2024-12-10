@@ -1,0 +1,14 @@
+.navbar {
+  background-color: #1976d2; /* Material UI default primary color */
+}
+
+.navbar-title {
+  flex-grow: 1;
+  color: #ffffff;
+  font-size: 18px;
+}
+
+.navbar-button {
+  color: #ffffff;
+  text-transform: none;
+}
