@@ -1,55 +1,81 @@
-import React, { useState, useEffect } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-} from "@mui/material";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useTable } from "react-table";
+import "../styles/AssetTable.css"; // Optional for custom styling
 
-const DataTable = () => {
-  const [assets, setAssets] = useState([]);
+function AssetTable() {
+  const [data, setData] = useState([]); // Store the data here
+  const [loading, setLoading] = useState(true); // To handle loading state
 
+  // Columns definition for the table
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: "ID",
+        accessor: "id", // Data property for ID
+      },
+      {
+        Header: "Location",
+        accessor: "location", // Data property for location
+      },
+    ],
+    []
+  );
+
+  // Fetch data from back-end API when the component mounts
   useEffect(() => {
-    axios
-      .get("/get-locations") // Backend API endpoint
-      .then((response) => {
-        setAssets(response.data);
+    fetch("http://127.0.0.1:8000/api/assets") // Your back-end API endpoint
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data); // Set data when it is fetched
+        setLoading(false); // Set loading to false
       })
       .catch((error) => {
-        console.error("Error fetching assets:", error);
+        console.error("Error fetching data:", error);
+        setLoading(false); // Set loading to false in case of error
       });
   }, []);
 
+  // Use the useTable hook to handle the table logic
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+  } = useTable({ columns, data });
+
+  if (loading) {
+    return <div>Loading...</div>; // Loading message while data is fetched
+  }
+
   return (
-    <div id="datatable" style={{ marginTop: "20px" }}>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Asset ID</TableCell>
-              <TableCell>Latitude</TableCell>
-              <TableCell>Longitude</TableCell>
-              <TableCell>Last Updated</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {assets.map((asset) => (
-              <TableRow key={asset.id}>
-                <TableCell>{asset.asset_id}</TableCell>
-                <TableCell>{asset.last_location_lat}</TableCell>
-                <TableCell>{asset.last_location_lng}</TableCell>
-                <TableCell>{asset.last_updated}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+    <div className="asset-table-container">
+      <h2>Asset Table</h2>
+      <table {...getTableProps()} className="asset-table">
+        <thead>
+          {headerGroups.map((headerGroup) => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column) => (
+                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {rows.map((row) => {
+            prepareRow(row);
+            return (
+              <tr {...row.getRowProps()}>
+                {row.cells.map((cell) => {
+                  return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
-};
+}
 
-export default DataTable;
+export default AssetTable;
