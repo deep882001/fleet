@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import fetchAssets from '../api/fetchAssets'; // Import fetchAssets
-import './AssetTable.css';
+import fetchAssets from '../api/fetchAssets'; // Import fetchAssets function
+import './AssetTable.css'; // Import the CSS file
 
 const AssetTable = () => {
   const [assets, setAssets] = useState([]);
@@ -22,9 +22,9 @@ const AssetTable = () => {
   }, []);
 
   return (
-    <div>
-      <h1>Asset Table</h1>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    <div className="asset-table-container">
+      <h1 className="asset-table-title">Asset Table</h1>
+      {error && <p className="asset-table-error">{error}</p>}
       <table className="asset-table">
         <thead>
           <tr>
