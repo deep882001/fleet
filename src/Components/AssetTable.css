@@ -1,0 +1,37 @@
+.asset-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .asset-table th, .asset-table td {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  .asset-table th {
+    background-color: white;
+    
+    color: black;
+  }
+  
+
+  .asset-table tr:hover {
+    background-color: lightgray;
+  }
+  
+  .loading {
+    font-size: 18px;
+    color: black;
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  .error {
+    font-size: 18px;
+    color: red;
+    text-align: center;
+    margin-top: 50px;
+  }
+  
