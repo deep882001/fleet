@@ -1,19 +1,36 @@
-import React from 'react';
-import AssetTable from './Components/AssetTable';
-import Navbar from './Components/navBar';
-import MapView from './Components/mapView';
-import './App.css';
+import React from "react";
+import "./../styles/AssetTable.css";
 
-const App = () => {
+const AssetTable = ({ assets }) => {
   return (
-    <div className="container">
-      <Navbar />
-      <main>
-        <MapView />
-        <AssetTable />
-      </main>
+    <div className="asset-table">
+      <h2>Asset Table</h2>
+      {assets.length === 0 ? (
+        <p>No assets available</p>
+      ) : (
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Latitude</th>
+              <th>Longitude</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {assets.map(asset => (
+              <tr key={asset.id}>
+                <td>{asset.name}</td>
+                <td>{asset.location.lat || "N/A"}</td>
+                <td>{asset.location.lng || "N/A"}</td>
+                <td>{asset.status}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };
 
-export default App;
+export default AssetTable;
